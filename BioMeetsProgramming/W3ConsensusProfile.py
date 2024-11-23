@@ -48,6 +48,15 @@ def Pr(text, profile):
         p *= profile[t][i]
     return p
 
+def ProfileMostProbablePattern(text, k, profile):
+    bestprob = -1
+    bestMatching = -1
+    for i in range(len(text) - k):
+        p = Pr(text[i:i + k], profile)
+        if p > bestprob :
+            bestprob = p
+            bestMatching = i
+    return text[bestMatching: bestMatching + k]
 
 if __name__ == "__main__":
     motifs = ['AACGTA', 'CCCGTT', 'CACCTT', 'GGATTA', 'TTCCGG']
@@ -57,9 +66,11 @@ if __name__ == "__main__":
     # print(Score(motifs))
 
     text = 'ACGGGGATTACC'
-    prof = '''
-    0.2 0.2 0.0 0.0 0.0 0.0 0.9 0.1 0.1 0.1 0.3 0.0
-    0.1 0.6 0.0 0.0 0.0 0.0 0.0 0.4 0.1 0.2 0.4 0.6
-    0.0 0.0 1.0 1.0 0.9 0.9 0.1 0.0 0.0 0.0 0.0 0.0
-    0.7 0.2 0.0 0.0 0.1 0.1 0.0 0.5 0.8 0.7 0.3 0.4'''.split(' ')
-    print(prof)
+    prof = {}
+    prof['A'] = [float(i) for i  in '0.2 0.2 0.3 0.2 0.3'.split(' ')]
+    prof['C'] = [float(i) for i  in '0.4 0.3 0.1 0.5 0.1'.split(' ')]
+    prof['G'] = [float(i) for i  in '0.3 0.3 0.5 0.2 0.4'.split(' ')]
+    prof['T'] = [float(i) for i  in '0.1 0.2 0.1 0.1 0.2'.split(' ')]
+    
+    # print(Pr('ACGGGGATTACC', prof))
+    print(ProfileMostProbablePattern('ACCTGTTTATTGCCTAAGTTCCGAACAAACCCAATATAGCCCGAGGGCCT', 5, prof))
