@@ -14,10 +14,14 @@ void PDP(vector<int>& k);
 int getSizeOfX(const int lenL);
 
 int main(){
-    vector <int> L{2, 2, 3, 3, 4, 5, 6, 7, 8, 10};
-    printVector(L);
 
-    PDP(L);
+    
+    vector <int> * L = new vector({2, 2, 3, 3, 4, 5, 6, 7, 8, 10});
+    set <int> * X = new set({0});
+    printVector(*L);
+    printSet(*X);
+
+    PDP(*L);
 
     return 0;
 }
@@ -62,23 +66,25 @@ void PDP(vector<int>& L){
 
     // Initialize set X
     set <int > X = {0, maxOfL};
-    printSet(X);
 
-
+    while (L.size() > 0) {
+        maxOfL = *max_element(L.begin(), L.end());
+        int newPossibleValue = *max_element(X.begin(), X.end()) - maxOfL;      // It is always positive value
+        
+        // Check if the new value can be the leftmost point in X
+        bool leftMostPoint = true;
+        for (int x : X) {
+            cout << x << "-->";
+            cout << X.count(10) << " -- " << X.count(50) << endl;
+            //  if (abs(x - newPossibleValue) not in L) :
+            //     leftMostPoint = False
+            //     break        
+        }
+    }
 }
     
 
 
-//     while len(L) > 0 :
-//         maxOfL = max(L)
-//         newPossibleValue = max(X) - maxOfL      # It is always positive value
-        
-//         # Check if the new value can be the leftmost point in X
-//         leftMostPoint = True
-//         for x in X :
-//             if abs(x - newPossibleValue) not in L :
-//                 leftMostPoint = False
-//                 break
         
 //         # If the new value is for sure the leftmost point
 //         if leftMostPoint :
