@@ -10,22 +10,21 @@ using namespace std;
 
 void printVector(const vector<int>& L);
 void printSet(const set<int>& X);
-void PDP(vector<int>& k);
+void PDP(vector<int>&, set<int>&);
 int getSizeOfX(const int lenL);
+bool checkIfVectorContainsValue(const vector<int>&, int);
+void importNewValue(set<int>&, vector<int>&, int, int);
 
 int main(){
+    vector <int> L{2, 2, 3, 3, 4, 5, 6, 7, 8, 10};
+    set <int> X{};
 
-    
-    vector <int> * L = new vector({2, 2, 3, 3, 4, 5, 6, 7, 8, 10});
-    set <int> * X = new set({0});
-    printVector(*L);
-    printSet(*X);
-
-    PDP(*L);
+    printVector(L);
+    PDP(L, X);
+    printSet(X);
 
     return 0;
 }
-    // set <ind> X s // print(PDP(L))
 
 void printVector(const vector <int>& L) {
     for (int num : L) {
@@ -51,7 +50,38 @@ int getSizeOfX(const int lenL){
     return int(n);
 }
 
-void PDP(vector<int>& L){
+bool checkIfVectorContainsValue(const vector<int>& v, const int target){
+    bool flag = 0;
+    for (int i : v) {
+        if (i == target) {
+            flag = 1;
+            break;
+        }
+    }
+    return flag;
+}
+
+void importNewValue(set<int>& X, vector<int>& L, int newValue, int maxOfL){
+    /*
+    Import new value in the set X
+    Delete every distance(new value, X) from L  */
+
+    // Delete max of L from the list L 
+    L.pop_back();
+
+    /* For each value xv in set X :
+        Find distance d(x, newValue)
+        Delete d from list L the  */
+    for (const int & x : X) {
+        int d = abs(x - newValue);
+        L.erase(find(L.begin(), L.end(), d));
+    }
+
+    // # Add newValue in set X
+    // X.add(newValue)
+}
+
+void PDP(vector<int>& L, set<int>& X){
     // Sort L in ascending order
     sort(L.begin(), L.end());
 
@@ -59,38 +89,38 @@ void PDP(vector<int>& L){
     int n = getSizeOfX(L.size());
     
     // Get the max value of L
-    int maxOfL = *max_element(L.begin(), L.end());
+    int maxOfL = L.back();
 
     // Delete max value of L from L
     L.pop_back();
 
     // Initialize set X
-    set <int > X = {0, maxOfL};
+    X.insert({0, maxOfL});
+    printVector(L);
+    printSet(X);
 
     while (L.size() > 0) {
-        maxOfL = *max_element(L.begin(), L.end());
+        maxOfL = L.back();
         int newPossibleValue = *max_element(X.begin(), X.end()) - maxOfL;      // It is always positive value
-        
+
         // Check if the new value can be the leftmost point in X
-        bool leftMostPoint = true;
-        for (int x : X) {
-            cout << x << "-->";
-            cout << X.count(10) << " -- " << X.count(50) << endl;
-            //  if (abs(x - newPossibleValue) not in L) :
-            //     leftMostPoint = False
-            //     break        
+        int leftMostPoint = true;
+        for (const int& x : X) {
+            if (checkIfVectorContainsValue(L, x)) {
+                leftMostPoint = false;
+                break;
+            }
+        }
+
+        // If the new value is for sure the leftmost point
+        if (leftMostPoint) {
+            int newValue = newPossibleValue;
+            importNewValue(X, L, newValue, maxOfL);
+        }
+        else {        
+            int newValue = maxOfL;              // Typically min(X) + maxOfL, but min(X)=0
+            importNewValue(X, L, newValue, maxOfL);
         }
     }
 }
     
-
-
-        
-//         # If the new value is for sure the leftmost point
-//         if leftMostPoint :
-//             newValue = newPossibleValue
-//             importNewValue(X, L, newValue, maxOfL)
-//         else :        
-//             newValue = maxOfL              # Typically min(X) + maxOfL, but min(X)=0
-//             importNewValue(X, L, newValue, maxOfL)
-//     return X
