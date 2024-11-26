@@ -16,7 +16,8 @@ bool checkIfVectorContainsValue(const vector<int>&, int);
 void importNewValue(set<int>&, vector<int>&, int, int);
 
 int main(){
-    vector <int> L{2, 2, 3, 3, 4, 5, 6, 7, 8, 10};
+    // vector <int> L{2, 2, 3, 3, 4, 5, 6, 7, 8, 10};
+    vector <int> L{9, 30, 100, 170, 293, 302, 393, 402, 462, 562, 632, 732, 855, 864, 945, 954, 975, 984, 1025, 1034, 1247, 1277, 1347, 1377, 1809, 1839, 1979, 2009};
     set <int> X{};
 
     printVector(L);
@@ -74,11 +75,14 @@ void importNewValue(set<int>& X, vector<int>& L, int newValue, int maxOfL){
         Delete d from list L the  */
     for (const int & x : X) {
         int d = abs(x - newValue);
-        L.erase(find(L.begin(), L.end(), d));
+        auto searchForD = find(L.begin(), L.end(), d);
+        if (searchForD != L.end()){
+            L.erase(searchForD);
+        }
     }
 
-    // # Add newValue in set X
-    // X.add(newValue)
+    // Add newValue in set X
+    X.insert(newValue);
 }
 
 void PDP(vector<int>& L, set<int>& X){
@@ -96,8 +100,6 @@ void PDP(vector<int>& L, set<int>& X){
 
     // Initialize set X
     X.insert({0, maxOfL});
-    printVector(L);
-    printSet(X);
 
     while (L.size() > 0) {
         maxOfL = L.back();
@@ -106,7 +108,7 @@ void PDP(vector<int>& L, set<int>& X){
         // Check if the new value can be the leftmost point in X
         int leftMostPoint = true;
         for (const int& x : X) {
-            if (checkIfVectorContainsValue(L, x)) {
+            if (checkIfVectorContainsValue(L, abs(x - newPossibleValue)) == false) {
                 leftMostPoint = false;
                 break;
             }
