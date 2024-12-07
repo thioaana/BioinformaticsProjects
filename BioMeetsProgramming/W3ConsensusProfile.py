@@ -42,11 +42,7 @@ def Score(motifs):
                 score += count[c][i]
     return score
                 
-def Pr(text, profile):
-    p = 1
-    for i, t in enumerate(text):
-        p *= profile[t][i]
-    return p
+0
 
 def ProfileMostProbablePattern(text, k, profile):
     bestprob = -1
